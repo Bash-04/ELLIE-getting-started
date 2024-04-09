@@ -27,7 +27,7 @@ class ContourWall:
 
         self.command_2_update_all = self.lib.command_2_update_all
 # c_void_p is a pointer to the serial port (pointer) and c_uint8 is an byte array (pointer) with for each led 3 bytes (b, g, r)
-        self.command_2_update_all.argtypes = [POINTER(ContourWallCore), c_uint8]    
+        self.command_2_update_all.argtypes = [POINTER(ContourWallCore), POINTER(c_uint8)]    
         self.command_2_update_all.restype = c_uint8
 
         # Assigning the function to a different name to avoid conflict
@@ -42,7 +42,9 @@ class ContourWall:
         return self.command_1_fill_solid(self.core, red, green, blue)
     
     def update_all(self, color_array):
-        return self.command_2_update_all(self.core, color_array) or 0
+        arr = (c_uint8  * len(color_array))(*color_array)
+        arrptr = POINTER(c_uint8 )(arr)
+        return self.command_2_update_all(self.core, arrptr)
 
     def add(self, a, b) -> int:
         return self.add_function(a, b)
