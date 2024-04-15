@@ -86,11 +86,12 @@ void setup() {  // Highest baudrate which worked consistantly. 921600 is also th
 void loop() {
   // int data = Serial.read();
   int bytes = Serial.readBytes(buffer, 76);
-  // +1 stands for the command asked for
+
   if (bytes == 76 || bytes == 1) {
     // if (data >= 0) {
     // Serial.write(data);
     // buffer = data;
+    // buffer[0] is the command given
     Serial.write("buffer: " + buffer[0]);
     switch (buffer[0]) {
       case 0:
